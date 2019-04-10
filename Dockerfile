@@ -36,20 +36,20 @@ RUN apt-get update && \
 RUN curl https://sh.rustup.rs -sSf | \
     sh -s -- --default-toolchain stable -y
 
+USER user
+ENV HOME /home/user
 ENV PATH=/root/.cargo/bin:$PATH
 
 RUN cargo install diesel_cli --no-default-features --features postgres
 RUN cargo install wasm-bindgen-cli --version 0.2.40
 RUN rustup target add wasm32-unknown-unknown
 
+WORKDIR /projects
+
 # The following instructions set the right
 # permissions and scripts to allow the container
 # to be run by an arbitrary user (i.e. a user
 # that doesn't already exist in /etc/passwd)
-USER user
-WORKDIR /projects
-
-ENV HOME /home/user
 RUN for f in "/home/user" "/etc/passwd" "/etc/group" "/projects"; do\
            sudo chgrp -R 0 ${f} && \
            sudo chmod -R g+rwX ${f}; \
