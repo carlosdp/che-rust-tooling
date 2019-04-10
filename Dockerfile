@@ -26,8 +26,7 @@ WORKDIR /projects
 # to be run by an arbitrary user (i.e. a user
 # that doesn't already exist in /etc/passwd)
 # Adding user to the 'root' is a workaround for https://issues.jboss.org/browse/CDK-305
-RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    useradd -u 1000 -G users,wheel,root -d /home/user --shell /bin/bash -m user && \
+RUN useradd -u 1000 -G users,root -d /home/user --shell /bin/bash -m user && \
     usermod -p "*" user
 
 USER user
