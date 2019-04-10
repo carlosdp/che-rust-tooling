@@ -33,18 +33,17 @@ RUN apt-get update && \
     apt-get -y clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN curl https://sh.rustup.rs -sSf | \
-    sh -s -- --default-toolchain stable -y
-
 USER user
 ENV HOME /home/user
-ENV PATH=/root/.cargo/bin:$PATH
+ENV PATH=/home/user/.cargo/bin:$PATH
+WORKDIR /projects
+
+RUN curl https://sh.rustup.rs -sSf | \
+    sh -s -- --default-toolchain stable -y
 
 RUN cargo install diesel_cli --no-default-features --features postgres
 RUN cargo install wasm-bindgen-cli --version 0.2.40
 RUN rustup target add wasm32-unknown-unknown
-
-WORKDIR /projects
 
 # The following instructions set the right
 # permissions and scripts to allow the container
