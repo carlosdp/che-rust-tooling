@@ -29,4 +29,12 @@ if ! grep -Fq "${USER_ID}" /etc/passwd; then
     sed "s/\${HOME}/\/home\/user/g" > /etc/group
 fi
 
+if test "${USER_ID}" = 0; then
+    # current user is root
+    /usr/sbin/sshd -D &
+elif sudo -n true > /dev/null 2>&1; then
+    # current user is a suoder
+    sudo /usr/sbin/sshd -D &
+fi
+
 exec "$@"
