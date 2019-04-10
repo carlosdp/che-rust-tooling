@@ -32,18 +32,18 @@ RUN useradd -u 1000 -G users,root -d /home/user --shell /bin/bash -m user && \
 USER user
 
 ENV HOME /home/user
-# RUN for f in "/home/user" "/etc/passwd" "/etc/group" "/projects"; do\
-#            sudo chgrp -R 0 ${f} && \
-#            sudo chmod -R g+rwX ${f}; \
-#         done && \
-#         # Generate passwd.template \
-#         cat /etc/passwd | \
-#         sed s#user:x.*#user:x:\${USER_ID}:\${GROUP_ID}::\${HOME}:/bin/bash#g \
-#         > /home/user/passwd.template && \
-#         # Generate group.template \
-#         cat /etc/group | \
-#         sed s#root:x:0:#root:x:0:0,\${USER_ID}:#g \
-#         > /home/user/group.template
+RUN bash -c 'for f in "/home/user" "/etc/passwd" "/etc/group" "/projects"; do\
+           sudo chgrp -R 0 ${f} && \
+           sudo chmod -R g+rwX ${f}; \
+        done && \
+        # Generate passwd.template \
+        cat /etc/passwd | \
+        sed s#user:x.*#user:x:\${USER_ID}:\${GROUP_ID}::\${HOME}:/bin/bash#g \
+        > /home/user/passwd.template && \
+        # Generate group.template \
+        cat /etc/group | \
+        sed s#root:x:0:#root:x:0:0,\${USER_ID}:#g \
+        > /home/user/group.template'
 
 COPY ["entrypoint.sh","/home/user/entrypoint.sh"]
 ENTRYPOINT ["/home/user/entrypoint.sh"]
