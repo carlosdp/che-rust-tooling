@@ -44,6 +44,8 @@ RUN curl https://sh.rustup.rs -sSf | \
 RUN cargo install diesel_cli --no-default-features --features postgres
 RUN cargo install wasm-bindgen-cli --version 0.2.40
 RUN rustup target add wasm32-unknown-unknown
+RUN cargo install cargo-watch
+RUN cargo install systemfd
 
 # The following instructions set the right
 # permissions and scripts to allow the container
